@@ -15,11 +15,12 @@ public class AnotherConcurrentGUI extends JFrame {
     private static final long serialVersionUID = -8630968055862320453L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
+    private static final int WAIT_TIME = 10000;
     private final JLabel display = new JLabel();
     private final JButton stop = new JButton("stop");
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
-
+    
     public AnotherConcurrentGUI() {
         super();
         final Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -66,22 +67,17 @@ public class AnotherConcurrentGUI extends JFrame {
         private volatile boolean stop;
         @Override
         public void run() {
-            while (!this.stop) {
-                try {
-                    Thread.sleep(1000);
-                    this.seconds++;
-                    if (this.seconds == 10) {
-                        SwingUtilities.invokeAndWait(() -> AnotherConcurrentGUI.this.stop.doClick());
-                        this.stop = true;
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Thread.sleep(AnotherConcurrentGUI.WAIT_TIME);
+                SwingUtilities.invokeAndWait(() -> AnotherConcurrentGUI.this.stop.doClick());
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-    }
+
+   }
     private class Agent implements Runnable {
         private volatile boolean stop;
         private volatile int counter;
