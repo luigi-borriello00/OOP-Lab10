@@ -62,7 +62,7 @@ public class AnotherConcurrentGUI extends JFrame {
             }
         });
     }
-    private class MyTimer implements Runnable{
+    private class MyTimer implements Runnable {
         private volatile int seconds;
         private volatile boolean stop;
         @Override
